@@ -9,8 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as R01RouteImport } from './routes/01'
 import { Route as IndexRouteImport } from './routes/index'
 
+const R01Route = R01RouteImport.update({
+  id: '/01',
+  path: '/01',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +25,39 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/01': typeof R01Route
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/01': typeof R01Route
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/01': typeof R01Route
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/01'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/01'
+  id: '__root__' | '/' | '/01'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  R01Route: typeof R01Route
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/01': {
+      id: '/01'
+      path: '/01'
+      fullPath: '/01'
+      preLoaderRoute: typeof R01RouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +70,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  R01Route: R01Route,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

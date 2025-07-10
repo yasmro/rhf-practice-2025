@@ -1,4 +1,8 @@
 import { useForm, FormProvider } from "react-hook-form";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Button } from "../ui/button";
+import { Card, CardTitle } from "../ui/card";
 
 type FormValues = {
   name: string;
@@ -23,17 +27,28 @@ export default function BasicForm() {
     // フォーム全体のコンポーネントを FormProvider でラップする FormProviderを使って、useFormで作成したメソッドを子コンポーネントに渡す
     <FormProvider {...methods}>
       {/* ここに子コンポーネントを追加 */}
-      <form onSubmit={methods.handleSubmit(handleSubmit)}>
-        <div>
-          <label htmlFor="name">Name:</label>
-          <input id="name" {...methods.register("name")} />
-        </div>
-        <div>
-          <label htmlFor="age">Age:</label>
-          <input id="age" type="number" {...methods.register("age")} />
-        </div>
-        <button type="submit">Submit</button>
-      </form>
+      <div className="p-4">
+        <Card className="px-4">
+          <CardTitle>Basic Form</CardTitle>
+          <form onSubmit={methods.handleSubmit(handleSubmit)}>
+            <div className="flex flex-col gap-2">
+              <div className="flex gap-4">
+                <Label htmlFor="name">Name:</Label>
+                <Input type="text" {...methods.register("name")} />
+              </div>
+              <div className="flex gap-4">
+                <Label htmlFor="age">Age:</Label>
+                <Input
+                  type="number"
+                  // valueAsNumberを使うことで、入力値を数値として扱う
+                  {...methods.register("age", { valueAsNumber: true })}
+                />
+              </div>
+              <Button type="submit">Submit</Button>
+            </div>
+          </form>
+        </Card>
+      </div>
     </FormProvider>
   );
 }
